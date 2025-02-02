@@ -23,6 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function handleQRCode(data,result) {
         try {
             const userData = JSON.parse(data);  // Expecting JSON format
+            document.getElementById("message").textContent = `QR Code Scanned! ${data}`;
             document.getElementById("name").value = userData.name;
             document.getElementById("email").value = userData.email;
             document.getElementById("rollno").value = userData.rollno;
