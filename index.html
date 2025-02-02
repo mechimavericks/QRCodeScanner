@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Scanner</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <h2>Scan QR Code</h2>
+    <div id="qr-reader" style="width:500px"></div>
+
+        <h2>Form</h2>
+        <p id="message"></p>
+        <form id="userForm">
+            <input type="text" id="name" placeholder="Name" readonly required>
+            <input type="email" id="email" placeholder="Email" readonly required>
+            <input type="text" id="rollno" placeholder="Roll No" readonly required>
+            <button type="submit">Submit</button>
+        </form>
+        
+        
+    <script defer src="/lib/xlsx.full.min.js"></script>
+    <script defer src="/lib/html5-qrcode.min.js"></script>
+    <script defer src="js/script.js"></script>
+</body>
+</html>
