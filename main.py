@@ -35,7 +35,7 @@ async def get_scanned_data():
         data = await collection.find().to_list(length=None)
         return data
     except Exception as e:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Internal Server Error")
 
 @app.post("/scan-qr/")
 async def store_scanned_data(email: str):
@@ -43,17 +43,17 @@ async def store_scanned_data(email: str):
         data = await collection.find_one({"email": email})
         if data:
             if data["status"]:
-                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="QR already Scanned")
+                return HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="QR already Scanned")
             else:
                 response = await collection.update_one({"email": email}, {"$set": {"status": True}})
                 if response.modified_count == 1:
                     return {"detail": "QR Scanned Successfully"}
                 else:
-                    raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Failed to update data")
+                    return HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Failed to update data")
         else:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="QR Is not Registered")
+            return HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="QR Is not Registered")
     except Exception as e:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Internal Server Error")
 
 @app.post("/insert-data/")
 async def insert_data(data: InsertedData):
@@ -61,4 +61,4 @@ async def insert_data(data: InsertedData):
         await collection.update_one({"email": data.email}, {"$set": data.dict()}, upsert=True)
         return {"detail": "Data stored successfully"}
     except Exception as e:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Internal Server Error")

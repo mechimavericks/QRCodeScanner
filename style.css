@@ -13,6 +13,7 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
+    flex-direction: column;
 }
 
 /* Container */
@@ -92,6 +93,15 @@ button {
 
 button:hover {
     background-color: #006666;
+}
+footer{
+    margin-top: 20px;
+    color: #333333;
+    font-size: 18px;
+}
+footer p a{
+    color: #008080;
+    text-decoration: none;
 }
 
 /* Responsive */

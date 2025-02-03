@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const serverUrl = "https://scanqrcode-eta.vercel.app/scan-qr/";
+    const serverUrl = "http://localhost:8000/scan-qr/";
 
 
     const html5QrcodeScanner = new Html5QrcodeScanner("qr-reader", { fps: 10, qrbox: 250 });
