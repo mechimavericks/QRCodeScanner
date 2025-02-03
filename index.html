@@ -7,20 +7,21 @@
     <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-    <h2>Scan QR Code</h2>
-    <div id="qr-reader" style="width:500px"></div>
-
-        <h2>Form</h2>
+    <div class="container">
+        <h1>Scan Your QR Code</h1>
+        <div id="qr-reader"></div>
+        
+        <h2>Fill Your Details</h2>
         <p id="message"></p>
+        
         <form id="userForm">
-            <input type="text" id="name" placeholder="Name" readonly required>
-            <input type="email" id="email" placeholder="Email" readonly required>
-            <input type="text" id="rollno" placeholder="Roll No" readonly required>
+            <input type="text" id="name" placeholder="Name" required>
+            <input type="email" id="email" placeholder="Email" required>
+            <input type="text" id="rollno" placeholder="Roll No" required>
             <button type="submit">Submit</button>
         </form>
-        
-        
-    <script defer src="./xlsx.full.min.js"></script>
+    </div>
+
     <script defer src="./html5-qrcode.min.js"></script>
     <script defer src="./script.js"></script>
 </body>
