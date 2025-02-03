@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, status
+from fastapi import FastAPI, HTTPException, status, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from motor import motor_asyncio
@@ -24,26 +24,15 @@ class InsertedData(BaseModel):
     rollno: str
     status: bool = False
 
-@app.on_event("startup")
-async def startup_db_client():
-    try:
-        # Initialize MongoDB client during startup
-        client = motor_asyncio.AsyncIOMotorClient(os.getenv("MONGO_URI"))
-        app.mongodb = client["student"]
-        app.collection = app.mongodb["scannedqr"]
-    except Exception as e:
-        print(f"Error initializing MongoDB client: {e}")
-        exit(1)
-
-@app.on_event("shutdown")
-async def shutdown_db_client():
-    # Close MongoDB client during shutdown
-    app.mongodb.client.close()
+# Initialize MongoDB client
+client = motor_asyncio.AsyncIOMotorClient(os.getenv("MONGO_URI"))
+db = client["student"]
+collection = db["scannedqr"]
 
 @app.get("/")
 async def get_scanned_data():
     try:
-        data = await app.collection.find().to_list(length=None)
+        data = await collection.find().to_list(length=None)
         return data
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
@@ -51,12 +40,12 @@ async def get_scanned_data():
 @app.post("/scan-qr/")
 async def store_scanned_data(email: str):
     try:
-        data = await app.collection.find_one({"email": email})
+        data = await collection.find_one({"email": email})
         if data:
             if data["status"]:
                 raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="QR already Scanned")
             else:
-                response = await app.collection.update_one({"email": email}, {"$set": {"status": True}})
+                response = await collection.update_one({"email": email}, {"$set": {"status": True}})
                 if response.modified_count == 1:
                     return {"detail": "QR Scanned Successfully"}
                 else:
@@ -69,7 +58,7 @@ async def store_scanned_data(email: str):
 @app.post("/insert-data/")
 async def insert_data(data: InsertedData):
     try:
-        await app.collection.update_one({"email": data.email}, {"$set": data.dict()}, upsert=True)
+        await collection.update_one({"email": data.email}, {"$set": data.dict()}, upsert=True)
         return {"detail": "Data stored successfully"}
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
