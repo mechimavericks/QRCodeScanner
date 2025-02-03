@@ -3,13 +3,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from motor import motor_asyncio
 import os
-from dotenv import load_dotenv
-load_dotenv()
 app = FastAPI()
 
 
-mongourl = os.getenv("MONGO_URI")
-mongourl="mongodb+srv://santoshvandari:9odBsliKHPvIaWnQ@student.mtock.mongodb.net/"
+mongourl = database_url = os.environ.get('MONGO_URI')
 
 # Add this to the end of the file
 try:
