@@ -25,7 +25,7 @@ class InsertedData(BaseModel):
     status: bool = False
 
 # Initialize MongoDB client
-client = motor_asyncio.AsyncIOMotorClient(os.getenv("MONGO_URI"))
+client = motor_asyncio.AsyncIOMotorClient("mongodb+srv://santoshvandari:9odBsliKHPvIaWnQ@student.mtock.mongodb.net/")
 db = client["student"]
 collection = db["scannedqr"]
 
