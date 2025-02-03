@@ -40,7 +40,8 @@ class InsertedData(BaseModel):
 @app.get("/")
 async def get_scanned_data():
     try:
-        data = await collection.find({"_id":0}).to_list(length=None)
+        projection = {'_id': False}
+        data = await collection.find({}, projection).to_list(length=None)
         return data
     except Exception as e:
         return HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=str(e))
