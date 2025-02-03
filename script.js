@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const serverUrl = "http://localhost:8000/scan-qr/";
+    const serverUrl = "https://qrcodescanner-b98i.onrender.com/scan-qr/";
 
 
     const html5QrcodeScanner = new Html5QrcodeScanner("qr-reader", { fps: 10, qrbox: 250 });
