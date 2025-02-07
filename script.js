@@ -1,7 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
     const serverUrl = "https://qrcodescanner-b98i.onrender.com/scan-qr/";
 
-
     const html5QrcodeScanner = new Html5QrcodeScanner("qr-reader", { fps: 10, qrbox: 250 });
     html5QrcodeScanner.render(handleQRCode);
 
@@ -14,32 +13,43 @@ document.addEventListener("DOMContentLoaded", function () {
             document.getElementById("rollno").value = userData.rollno || '';
         } catch (error) {
             console.log("Qr Scan Error", error);
-            
+
             document.getElementById("message").textContent = "Invalid QR Code";
         }
     }
 
+    const submitBtn = document.getElementById("submit");
     document.getElementById("userForm").addEventListener("submit", function (event) {
         event.preventDefault();
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Submitting...";
         const name = document.getElementById("name").value.trim();
         const email = document.getElementById("email").value.trim();
         const rollno = document.getElementById("rollno").value.trim();
         const message = document.getElementById("message");
-        if(!name || !email || !rollno){
+        if (!name || !email || !rollno) {
             message.innerHTML = "Please fill all the fields";
             message.style.color = "red";
+            submitBtn.disabled = false;
+            submitBtn.textContent = "Submit";
+            return
         }
-            
-        fetch(`${serverUrl}?email=${email}`,{
-            method:"POST",
+
+        fetch(`${serverUrl}?email=${email}`, {
+            method: "POST",
         })
-        .then(response => response.json())
-        .then(data => {
-            message.innerHTML = data.detail;
-        }).catch(error => {
-            message.innerHTML = "An error occured";
-        });
-        
+            .then(response => response.json())
+            .then(data => {
+                message.innerHTML = data.detail;
+                submitBtn.disabled = false;
+                submitBtn.textContent = "Submit";
+            }).catch(error => {
+                console.error("Fetch error:", error); // Log the error
+                message.innerHTML = "An error occured";
+                submitBtn.disabled = false;
+                submitBtn.textContent = "Submit";
+            });
+
     });
-        
+
 });
