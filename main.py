@@ -3,10 +3,14 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from motor import motor_asyncio
 import os
+from bson import ObjectId
 app = FastAPI()
 
 
-mongourl = database_url = os.environ.get('MONGO_URI')
+from dotenv import load_dotenv
+load_dotenv()
+
+mongourl = os.environ.get('MONGO_URI')
 
 # Add this to the end of the file
 try:
@@ -42,6 +46,18 @@ async def get_scanned_data():
         return data
     except Exception as e:
         return HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=str(e))
+    
+@app.get("/get-data/{id}")
+async def get_scanned_data(id: str):
+    try:
+        id = ObjectId(id)
+        data = await collection.find_one({"_id":id},projection={"_id":False})
+        if not data:
+            return HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail="Data not found")
+        return data
+    except Exception as e:
+        return HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=str(e))
+    
 
 
 @app.post("/scan-qr/")
