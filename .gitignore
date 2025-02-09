@@ -2,3 +2,5 @@
 /__pycache__
 /.env
 /info.txt
+/DataStorerInDB/CompressedImages/
+/DataStorerInDB/DownloadImages/

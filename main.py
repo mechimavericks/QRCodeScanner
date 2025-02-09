@@ -41,8 +41,9 @@ class InsertedData(BaseModel):
 @app.get("/")
 async def get_scanned_data():
     try:
+        localcollection = db["studentdata"]
         projection = {'_id': False}
-        data = await collection.find({}, projection).to_list(length=None)
+        data = await localcollection.find({}, projection).to_list(length=None)
         return data
     except Exception as e:
         return HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=str(e))
@@ -51,7 +52,8 @@ async def get_scanned_data():
 async def get_scanned_data(id: str):
     try:
         id = ObjectId(id)
-        data = await collection.find_one({"_id":id},projection={"_id":False})
+        localcollection = db["studentdata"]
+        data = await localcollection.find_one({"_id":id},projection={"_id":False})
         if not data:
             return HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail="Data not found")
         return data
