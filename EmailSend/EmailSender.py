@@ -100,7 +100,7 @@ async def send_emails_concurrently(contacts):
                 recipient_email = row['email']
                 recipient_name = row['fullname']
                 recipient_id = row['_id']
-                id_card_link = f"https://idcard.mechimavericks.tech/?id={recipient_id}"
+                id_card_link = f"https://idcard.mechimavericks.tech/?id={recipient_id}" #This URL has been removed
                 
                 print(f"Queuing email for {recipient_name} ({recipient_email})")
                 task = asyncio.create_task(

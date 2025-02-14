@@ -29,6 +29,7 @@ except Exception as e:
 def upload_to_imgbb(image_path):
     try:
         with open(image_path, "rb") as img_file:
+            # All the Uploaded Student Data Has been Removed due to Privacy Concern. 
             response = requests.post(
                 "https://api.imgbb.com/1/upload",
                 data={"key": API_KEY},
